@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title>Subrata Paul</title>
+	<link rel="stylesheet" href="css/custom.css" />
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="js/jquery.touchSwipe.min.js"></script>
+</head>
+<body>
+	<div class="wrapper" id="swipe_temp">
+		<div class="paul"></div>
+		<div class="arrow_box">
+			<div class="arrow"></div>
+		</div>
+	</div>
+</body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+
+		var shaking = false;
+		var playing = false;
+		var wait = false;
+		var socket = io.connect('http://192.168.43.136:5000');
+
+		$(document).ready(function(){
+				$(function() {
+					//Enable swiping...
+					$("#swipe_temp").swipe( {
+						//Generic swipe handler for all directions
+						swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+							console.log("You swiped " + direction );
+							if(direction == 'left' || direction == 'up' || direction == 'right'){
+								if(direction == 'left'){
+									$('.arrow').css({display: 'block', transform: 'rotate(0deg)'});
+								}
+								else if(direction == 'up'){
+									$('.arrow').css({display: 'block', transform: 'rotate(90deg)'});
+								}
+								else{
+									$('.arrow').css({display: 'block', transform: 'rotate(180deg)'});
+								}
+								socket.emit('block', {block_dir: direction, player: 'p2'});
+							}
+						},
+						//Default is 75px, set to 0 for demo so any distance triggers swipe
+					   threshold:0
+					});
+				});
+			});
+
+	</script>
+</html>

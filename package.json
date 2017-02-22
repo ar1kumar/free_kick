@@ -1,0 +1,25 @@
+{
+  "name": "free_kick",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "events": "^1.1.1",
+    "express": "^3.21.2",
+    "jade": "^0.12.4",
+    "now": "^0.6.1",
+    "request": "^2.36.0",
+    "requirejs": "^2.1.10",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "none"
+  },
+  "author": "ar1kumar",
+  "license": "ISC"
+}

@@ -2,94 +2,62 @@
 <html lang="en-US">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Eat My Goal</title>
 	<link rel="stylesheet" href="css/custom.css" />
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.touchSwipe.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
 </head>
 <body >
 	<div class="wrapper" id="wrapper">
-		<div class="name1">Player 1</div>
-		<div class="name2">Player 2</div>
-		<div id="ground"></div>
-		<div id="p1" class="flip"></div>
-		<div id="p2"></div>
-		<div id="cactus"></div>
-		<div id="start" onclick="shootout()">PLAY</div>
-		<div id="counter"></div>
-		<audio src="assets/bang.mp3" id="bang"></audio>
+		<div class="sky">
+			<div class="logo"></div>
+		</div>
+		<div class="goal_post">
+			<div class="football"></div>
+			<div class="subrata"></div>
+		</div>
+		<audio src="assets/ohh.mp3" id="scored"></audio>
+		<audio src="assets/miss.mp3" id="missed"></audio>
 	</div>
 	<script src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript">
 			var playing = true;
-			var socket = io.connect('http://192.168.43.6');
+			var left = true;
+			var socket = io.connect('http://192.168.43.136:5000');
 			var p1 = "Player 1", p2 = "Player 2";
 
-			socket.on('fire', function(data){
-				console.log(data.player);
-				if(playing){
-					if(data.player=="p1"){
-						$('#p1').css('background-position', 'center');
-						$('#counter').html(p1+' WINS');
-						$('#p2').css({'background-position': 'bottom','top':'60%'});
-						$('#p2').addClass('dead_2');
-						console.log('1 wins');
-						var bang = $("#bang")[0];
-						bang.play();
-						
+			socket.on('kicked',function(data){
+					// clearInterval(goalieMove);
+					var goalieClass = data.save+"Goalie";
+					var ballClass = data.shot+"Ball";
+					$('.football').addClass(ballClass, 2000);
+					$('.subrata').addClass(goalieClass, 1500);
+
+					if(data.save == data.shot){
+						//missed
+						var miss = $('#missed')[0];
+						miss.play();
+
+					}else{
+						//scored
+						var score = $('#scored')[0];
+						score.play();
 					}
-					else {
-						$('#p2').css('background-position', 'center');
-						$('#counter').html(p2+' WINS');
-						$('#p1').css({'background-position': 'bottom','top':'60%'});
-						$('#p1').removeClass("flip").addClass('dead');
-						console.log('2 wins');
-						var bang = $("#bang")[0];
-						bang.play();
-					}
-					
-					playing = false;
-				}
-			
-				//frosty = setInterval(draw, 33);
+
+
 			});
-			
-			socket.on('add_name1', function(data){
-				
-				if(data.player=="p1"){
-					$('.name1').html(data.name);
-					p1 = data.name;
-					console.log(data.name+"owedk");
+			var goalieMove = setInterval(function(){
+				if(left){
+					$('.subrata').css({left:"70%"});
+					left = false;
+				} else {
+					$('.subrata').css({left: "20%"});
+					left = true;
 				}
-				else
-				{
-					p2 = data.name;
-					$('.name2').html(data.name);
-				}
-				console.log(data.player+"player");
-			});
-			
-			function shootout(){
-				$('#start').hide();
-				$('#counter').show();
-				var count = 3;
-				var timer = setInterval(function(){
-					if(count>0){
-						$('#counter').html(count);
-						count--;
-					}
-					else {
-						$('#counter').html('FIRE!');
-						clearInterval(timer);
-						socket.emit('begin');
-					}
-				}, 1000);
-			}
-			
-			function primed(){
-				
-			}
-			
-			
+			}, 1500);
+
 	</script>
 </body>
 </html>

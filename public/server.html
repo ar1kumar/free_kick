@@ -7,7 +7,7 @@
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery.touchSwipe.js"></script>
 	<script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-
+	<script type="text/javascript" src="js/utils.js"></script>
 </head>
 <body >
 	<div class="wrapper" id="wrapper">
@@ -25,7 +25,8 @@
 		<script type="text/javascript">
 			var playing = true;
 			var left = true;
-			var socket = io.connect('http://192.168.43.136:5000');
+			var baseURL = common.baseUrl.connect();
+			var socket = io.connect(baseURL);
 			var p1 = "Player 1", p2 = "Player 2";
 
 			socket.on('kicked',function(data){
